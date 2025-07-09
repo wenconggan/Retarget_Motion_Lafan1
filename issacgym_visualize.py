@@ -87,8 +87,11 @@ class MotionPlayer:
         motion_data = self.load_data()
         
         root_state_tensor = torch.zeros((1, 13), dtype=torch.float32)
+
         dof_state_tensor = torch.zeros((18, 2), dtype=torch.float32)
-        
+
+        # dof_state_tensor = torch.zeros((29, 2), dtype=torch.float32)
+
         # main loop
         while not self.gym.query_viewer_has_closed(viewer):
             for frame_nr in range(motion_data.shape[0]):

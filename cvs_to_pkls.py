@@ -13,37 +13,29 @@ G1_ROTATION_AXIS = torch.tensor([[
     [0, 1, 0], # l_hip_pitch 
     [1, 0, 0], # l_hip_roll
     [0, 0, 1], # l_hip_yaw
-
     [0, 1, 0], # l_knee
     [0, 1, 0], # l_ankle_pitch
     [1, 0, 0], # l_ankle_roll
-    
     [0, 1, 0], # r_hip_pitch
     [1, 0, 0], # r_hip_roll
     [0, 0, 1], # r_hip_yaw
-    
     [0, 1, 0], # r_knee
     [0, 1, 0], # r_ankle_pitch
     [1, 0, 0], # r_ankle_roll
-    
     [0, 0, 1], # waist_yaw_joint
     [1, 0, 0], # waist_roll_joint
     [0, 1, 0], # waist_pitch_joint
-   
     [0, 1, 0], # l_shoulder_pitch
     [1, 0, 0], # l_shoulder_roll
     [0, 0, 1], # l_shoulder_yaw
-    
     [0, 1, 0], # l_elbow
-    
     [0, 1, 0], # r_shoulder_pitch
     [1, 0, 0], # r_shoulder_roll
     [0, 0, 1], # r_shoulder_yaw
-    
     [0, 1, 0], # r_elbow
     ]])
 
-x2_rotation_axis = torch.tensor([[
+X2_ROTATION_AXIS = torch.tensor([[
     [0, 0, 1],  # l_hip_yaw
     [1, 0, 0],  # l_hip_roll
     [0, 1, 0],  # l_hip_pitch
@@ -72,19 +64,15 @@ class MotionPlayer:
         if self.args.robot_type == 'g1':
             urdf_path = "robot_description/g1/g1_29dof_rev_1_0.urdf"
             self.robot = pin.RobotWrapper.BuildFromURDF('robot_description/g1/g1_29dof_rev_1_0.urdf', 'robot_description/g1', pin.JointModelFreeFlyer())
-            self.Tpose = np.array([0,0,0.785,0,0,0,1,
-                                    -0.15,0,0,0.3,-0.15,0,
-                                    -0.15,0,0,0.3,-0.15,0,
-                                    0,0,0,
-                                    0, 1.57,0,1.57,0,0,0,
-                                    0,-1.57,0,1.57,0,0,0]).astype(np.float32)
         elif self.args.robot_type == 'h1_2':
             urdf_path = "robot_description/h1_2/h1_2_wo_hand.urdf"
         elif self.args.robot_type == 'h1':
             urdf_path = "robot_description/h1/h1.urdf"
         elif self.args.robot_type == 'x2':
             urdf_path = "robot_description/x2/x2.urdf"
-        
+        else:
+            raise ValueError(f"unknowed robot_type: {args.robot_type}")
+
         # inital gym
         self.gym = gymapi.acquire_gym()
         # create sim environment
@@ -102,7 +90,6 @@ class MotionPlayer:
         sim_params.dt = 1.0 / 30.0
         sim_params.gravity = gymapi.Vec3(0.0, 0, -9.81)
         sim_params.up_axis = gymapi.UP_AXIS_Z
-        
         return self.gym.create_sim(0, 0, gymapi.SIM_PHYSX, sim_params)
 
     def _add_ground_plane(self):
@@ -122,7 +109,6 @@ class MotionPlayer:
         asset_options = gymapi.AssetOptions()
         asset_options.fix_base_link = False
         asset_options.default_dof_drive_mode = gymapi.DOF_MODE_NONE
-        
         asset_root = os.path.dirname(urdf_path)
         asset_file = os.path.basename(urdf_path)
         
@@ -166,7 +152,13 @@ class MotionPlayer:
         print(f"加载动作文件: {file_name}, 帧数: {motion_data.shape[0]}")
 
         root_state_tensor = torch.zeros((1, 13), dtype=torch.float32)
-        dof_state_tensor = torch.zeros((18, 2), dtype=torch.float32)
+
+        if args.robot_type == 'g1':
+            dof_state_tensor = torch.zeros((29, 2), dtype=torch.float32)
+        elif args.robot_type == 'x2':
+            dof_state_tensor = torch.zeros((18, 2), dtype=torch.float32)
+        else:
+            raise ValueError(f"unknowed robot_type: {args.robot_type}")
 
         root_trans_all = []
         pose_aa_all = []
@@ -209,10 +201,22 @@ class MotionPlayer:
             print()
             root_trans_all = torch.cat(root_trans_all, dim=0).view(-1, 3).float()
             root_rot_all = torch.cat(root_rot_all, dim=0).view(-1, 4).float()
-            dof_pos_all = torch.cat(dof_pos_all, dim=0).view(-1, 18).float()
+
+
+            if args.robot_type == 'g1':
+                dof_pos_all = torch.cat(dof_pos_all, dim=0).view(-1, 29).float()
+                dof_pos_all = torch.cat((dof_pos_all[:, :19], dof_pos_all[:, 22:26]), dim=1).float()
+                rotation_axis = G1_ROTATION_AXIS
+            elif args.robot_type == 'x2':
+                dof_pos_all = torch.stack(dof_pos_all).float()
+                rotation_axis = X2_ROTATION_AXIS
+            else:
+                raise ValueError(f"unknowed robot_type: {args.robot_type}")
+
+
             rot_vec_all = torch.cat(rot_vec_all, dim=0).view(-1, 3).float()
             N = rot_vec_all.shape[0]
-            pose_aa = torch.cat([rot_vec_all[None, :, None], x2_rotation_axis * dof_pos_all[None, :, :, None],
+            pose_aa = torch.cat([rot_vec_all[None, :, None], rotation_axis,
                                  torch.zeros((1, N, 3, 3))], dim=2)
             data_name = self.args.robot_type + '_' + self.args.file_name
             data_dump = {}
@@ -330,24 +334,32 @@ class MotionPlayer:
 
             for frame_nr in range(max_motion_length):
                 configuration = torch.from_numpy(motion_data[frame_nr, :])
-
                 root_trans_all.append(configuration[:3])
                 root_rot_all.append(configuration[3:7])
                 dof_pos_all.append(configuration[7:])
-
                 rotation = R.from_quat(configuration[3:7])
                 rotvec = torch.from_numpy(rotation.as_rotvec())
                 rot_vec_all.append(rotvec)
 
             root_trans_all = torch.stack(root_trans_all).float()
             root_rot_all = torch.stack(root_rot_all).float()
-            dof_pos_all = torch.stack(dof_pos_all).float()
+
+            if args.robot_type == 'g1':
+                dof_pos_all = torch.cat(dof_pos_all, dim=0).view(-1, 29).float()
+                dof_pos_all = torch.cat((dof_pos_all[:, :19], dof_pos_all[:, 22:26]), dim=1).float()
+                rotation_axis = G1_ROTATION_AXIS
+            elif args.robot_type == 'x2':
+                dof_pos_all = torch.stack(dof_pos_all).float()
+                rotation_axis = X2_ROTATION_AXIS
+            else:
+                raise ValueError(f"unknowed robot_type: {args.robot_type}")
+
             rot_vec_all = torch.stack(rot_vec_all).float()
             N = rot_vec_all.shape[0]
 
             pose_aa = torch.cat([
                 rot_vec_all[None, :, None],
-                x2_rotation_axis * dof_pos_all[None, :, :, None],
+                rotation_axis * dof_pos_all[None, :, :, None],
                 torch.zeros((1, N, 3, 3))
             ], dim=2)
 
@@ -363,7 +375,6 @@ class MotionPlayer:
                     "fps": 30
                 }
             }
-
             save_dir = f"pkl_data/{self.args.robot_type}"
             os.makedirs(save_dir, exist_ok=True)
             save_path = os.path.join(save_dir, file_base + ".pkl")
@@ -373,7 +384,8 @@ class MotionPlayer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_name', type=str, help="File name", default='dance1_subject2.csv')
+    parser.add_argument('--file_name', type=str, help="File name", default='dance1_subject3.csv')
+    # parser.add_argument('--file_name', type=str, help="File name", default='*.csv')
     parser.add_argument('--robot_type', type=str, help="Robot type", default='x2')
     parser.add_argument('--no_viewer', action='store_true', help="Only convert, no rendering")
     args = parser.parse_args()
