@@ -17,6 +17,8 @@ class MotionPlayer:
             urdf_path = "robot_description/h1/h1.urdf"
         elif self.args.robot_type == 'x2':
             urdf_path = "robot_description/x2/x2.urdf"
+        elif self.args.robot_type == 'x3':
+            urdf_path = "robot_description/X3/x3.urdf"
         # inital gym
         self.gym = gymapi.acquire_gym()
         # create sim environment
@@ -88,9 +90,9 @@ class MotionPlayer:
         
         root_state_tensor = torch.zeros((1, 13), dtype=torch.float32)
 
-        dof_state_tensor = torch.zeros((18, 2), dtype=torch.float32)
+        dof_state_tensor = torch.zeros((24, 2), dtype=torch.float32)
 
-        # dof_state_tensor = torch.zeros((29, 2), dtype=torch.float32)
+        #dof_state_tensor = torch.zeros((29, 2), dtype=torch.float32)
 
         # main loop
         while not self.gym.query_viewer_has_closed(viewer):
@@ -121,8 +123,8 @@ class MotionPlayer:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_name', type=str, help="File name", default='dance1_subject2.csv')
-    parser.add_argument('--robot_type', type=str, help="Robot type", default='x2')
+    parser.add_argument('--file_name', type=str, help="File name", default='dance2_subject2.csv')
+    parser.add_argument('--robot_type', type=str, help="Robot type", default='x3')
     args = parser.parse_args()
     loader = MotionPlayer(args)
     loader.run_viewer()

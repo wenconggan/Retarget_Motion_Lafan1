@@ -1,0 +1,23 @@
+# Format - source_robot_joint: target_robot_joint
+source_robot: "x2"
+target_robot: "x2"
+height_offset: 0  # Vertical offset between robots
+joint_pairs:
+  L_hip_yaw: L_hip_yaw
+  L_hip_roll: L_hip_roll
+  L_hip_pitch: L_hip_pitch
+  L_knee_pitch: L_knee_pitch
+  L_ankle_pitch: L_ankle_pitch
+  L_shoulder_pitch: L_shoulder_pitch
+  L_shoulder_roll: L_shoulder_roll
+  L_shoulder_yaw: L_shoulder_yaw
+  L_elbow_pitch: L_elbow_pitch
+  R_hip_yaw: R_hip_yaw
+  R_hip_roll: R_hip_roll
+  R_hip_pitch: R_hip_pitch
+  R_knee_pitch: R_knee_pitch
+  R_ankle_pitch: R_ankle_pitch
+  R_shoulder_pitch: R_shoulder_pitch
+  R_shoulder_roll: R_shoulder_roll
+  R_shoulder_yaw: R_shoulder_yaw
+  R_elbow_pitch: R_elbow_pitch

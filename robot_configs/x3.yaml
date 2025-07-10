@@ -1,7 +1,7 @@
 urdf_path: robot_description/X3/x3.urdf
 urdf_root: robot_description/X3
 
-base_height: 0.89
+base_height: 95
 scale: 1.0
-t_pose: [0, 0, 0.86, 0, 0, 0, 1, 0, 0, -0.2, 0.4, -0.2, 0, 0, -0.2, 0.4, -0.2,
+t_pose: [0, 0, 0.95, 0, 0, 0, 1, 0, 0, -0.2, 0.4, -0.2, 0, 0, -0.2, 0.4, -0.2,
          0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,]
