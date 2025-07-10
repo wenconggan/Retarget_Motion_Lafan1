@@ -13,6 +13,7 @@ python extract_joint_names.py -u /home/wenconggan/motion_retarget/robot_descript
 
 python extract_joint_names.py -u /home/wenconggan/桌面/LAFAN1_Visualize/motion_retarget/robot_description/x2/x2.urdf -v
 
+python extract_joint_names.py -u /home/wenconggan/桌面/Retarget_Motion_Lafan1/robot_description/x3/x3.urdf -v
 
 ```
 ```bas
@@ -25,11 +26,11 @@ python extract_joint_names.py -u robot1.urdf robot2.urdf --no-limits
 
 ```bash
 python retarget_motion.py \
-    --config joint_mappings/g1_x2.yaml \
+    --config joint_mappings/g1_x3.yaml \
     --source-urdf robot_description/g1/g1_29dof_rev_1_0.urdf \
-    --target-urdf robot_description/x2/x2.urdf \
-    --output-dir retargeted_motions/x2 \
-    /home/wenconggan/桌面/LAFAN1_Visualize/motion_retarget/retargeted_motions/g1/dance1_subject2.csv
+    --target-urdf robot_description/x3/x3.urdf \
+    --output-dir retargeted_motions/x3 \
+    /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject2.csv
 ```
 
 3. Visualizing retargeted motion files.

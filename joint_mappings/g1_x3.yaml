@@ -1,7 +1,7 @@
 # Format - source_robot_joint: target_robot_joint
 source_robot: "g1"
 target_robot: "x3"
-height_offset: 0  # Vertical offset between robots
+height_offset: -0.125 # Vertical offset between robots
 joint_pairs:
   waist_yaw_joint: waist_yaw
   waist_roll_joint: waist_roll
