@@ -143,13 +143,13 @@ class MotionPlayer:
         motion_data_list, file_name_list = self.load_data()
 
         if len(motion_data_list) != 1:
-            print("❌ run_viewer 只支持单个 motion 文件，请用 --file_name 指定具体文件")
+            print("❌ run_viewer only supports a single motion file. Please specify the file using --file_name.")
             return
 
         motion_data = motion_data_list[0]  # 取第一个文件数据
         file_name = file_name_list[0]
 
-        print(f"加载动作文件: {file_name}, 帧数: {motion_data.shape[0]}")
+        print(f"Load Motion File: {file_name}, Frames: {motion_data.shape[0]}")
 
         root_state_tensor = torch.zeros((1, 13), dtype=torch.float32)
 
@@ -174,7 +174,7 @@ class MotionPlayer:
             fraction = current / total
             filled_length = int(bar_length * fraction)
             bar = '#' * filled_length + '-' * (bar_length - filled_length)
-            print(f"\r渲染进度: |{bar}| {current}/{total}", end='', flush=True)
+            print(f"\rRendering Progress: |{bar}| {current}/{total}", end='', flush=True)
 
         while not self.gym.query_viewer_has_closed(self.viewer):
             for frame_nr in range(start_frame,max_motion_length):
@@ -240,7 +240,6 @@ class MotionPlayer:
         robot_type = self.args.robot_type
         base_path = os.path.join('retargeted_motions', robot_type)
 
-        # 使用 glob 匹配所有 csv 文件
         file_path = os.path.join(base_path, file_name)
         matched_files = sorted(glob.glob(file_path))
 
@@ -284,18 +283,15 @@ class MotionPlayer:
             parent_joint_id = self.robot.model.frames[frame_id].parentJoint
             parent_joint_name = self.robot.model.names[parent_joint_id]
             joint_tf = self.robot.data.oMi[parent_joint_id]
-            
             ref_body_pos = joint_tf.translation 
             ref_body_rot = joint_tf.rotation
-            
             rotation = R.from_matrix(ref_body_rot)
             rot_vec = rotation.as_rotvec()
-        
+
             if frame_name == 'pelvis':
                 _rot_vec = rot_vec
                 _root_trans = ref_body_pos
                 _root_rot = ref_body_rot
-
             color_inner = (0.0, 0.0, 0.545)
             color_inner = tuple(color_inner)
 
@@ -379,7 +375,7 @@ class MotionPlayer:
             os.makedirs(save_dir, exist_ok=True)
             save_path = os.path.join(save_dir, file_base + ".pkl")
             joblib.dump(data_dump, save_path)
-            print(f"[✓] 已保存：{save_path}")
+            print(f"[✓] saved：{save_path}")
 
 
 if __name__ == "__main__":

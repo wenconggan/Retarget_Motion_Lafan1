@@ -2,12 +2,10 @@ import argparse
 import glob
 import os
 from typing import Dict, List, Tuple
-
 import numpy as np
 import pinocchio as pin
 import torch
 import yaml
-from pandas.core.arraylike import default_array_ufunc
 from tqdm import tqdm
 
 class RetargetingConfig:
@@ -16,7 +14,7 @@ class RetargetingConfig:
         with open(config_path, "r") as f:
             config = yaml.safe_load(f)
 
-        self.source_robot = config["source_robot"]
+        # self.source_robot = config["source_robot"]
         self.target_robot = config["target_robot"]
         self.height_offset = config.get("height_offset", 0.0)
         self.joint_mapping = config["joint_pairs"]
@@ -30,7 +28,6 @@ class MotionRetargeting:
         self.source_model, self.source_data = self.load_robot_model(source_urdf)
         self.target_model, self.target_data = self.load_robot_model(target_urdf)
 
-        # Get joint IDs for mapping
         self.source_joint_ids = [
             self.source_model.getJointId(name)
             for name in self.config.joint_mapping.keys()
@@ -199,12 +196,11 @@ def main():
         "--config",
         type=str,
         required=True,
-        help="Path to joint mapping YAML config",
     )
     parser.add_argument(
         "--source-urdf",
         type=str,
-        required=True,
+        default="robot_description/g1/g1_29dof_rev_1_0.urdf",
         help="Path to source robot URDF",
     )
     parser.add_argument(

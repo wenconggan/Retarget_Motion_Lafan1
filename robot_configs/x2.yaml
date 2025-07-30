@@ -1,6 +1,30 @@
+# Format - source_robot_joint: target_robot_joint
+source_robot: "g1"
+target_robot: "x2"
+height_offset: -0.125 # Vertical offset between robots
+joint_pairs:
+  left_hip_yaw_joint: L_hip_yaw
+  left_hip_roll_joint: L_hip_roll
+  left_hip_pitch_joint: L_hip_pitch
+  left_knee_joint: L_knee_pitch
+  left_ankle_pitch_joint: L_ankle_pitch
+  left_shoulder_pitch_joint: L_shoulder_pitch
+  left_shoulder_roll_joint: L_shoulder_roll
+  left_shoulder_yaw_joint: L_shoulder_yaw
+  left_elbow_joint: L_elbow_pitch
+  right_hip_yaw_joint: R_hip_yaw
+  right_hip_roll_joint: R_hip_roll
+  right_hip_pitch_joint: R_hip_pitch
+  right_knee_joint: R_knee_pitch
+  right_ankle_pitch_joint: R_ankle_pitch
+  right_shoulder_pitch_joint: R_shoulder_pitch
+  right_shoulder_roll_joint: R_shoulder_roll
+  right_shoulder_yaw_joint: R_shoulder_yaw
+  right_elbow_joint: R_elbow_pitch
+
 urdf_path: robot_description/x2/x2.urdf
 urdf_root: robot_description/x2
-base_height: 0.91
+base_height: 0.89
 scale: 1.0
 t_pose: [0, 0, 0.88, 0, 0, 0, 1, 0, 0, -0.2, 0.4, -0.2, 0, 0, -0.2, 0.4, -0.2,
-         0, 0, 0, 0, 0, 0, 0, 0]
+         0, 0, 0, 0.5, 0, 0, 0, 0.5]

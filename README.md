@@ -26,11 +26,15 @@ python extract_joint_names.py -u robot1.urdf robot2.urdf --no-limits
 
 ```bash
 python retarget_motion.py \
-    --config joint_mappings/g1_x3.yaml \
+    --config robot_configs/x2.yaml \
     --source-urdf robot_description/g1/g1_29dof_rev_1_0.urdf \
-    --target-urdf robot_description/x3/x3.urdf \
-    --output-dir retargeted_motions/x3 \
+    --target-urdf robot_description/x2/x2.urdf \
+    --output-dir retargeted_motions/x2 \
     /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject2.csv
+
+python retarget_motion.py     --config robot_configs/x3.yaml  --target-urdf robot_description/x3/x3.urdf     --output-dir retargeted_motions/x3     /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject3.csv
+
+
 ```
 
 3. Visualizing retargeted motion files.
