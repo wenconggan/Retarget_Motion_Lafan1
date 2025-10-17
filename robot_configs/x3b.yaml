@@ -1,0 +1,36 @@
+# Format - source_robot_joint: target_robot_joint
+source_robot: "g1"
+target_robot: "x3"
+height_offset: -0.125 # Vertical offset between robots
+urdf_path: robot_description/x3b/x3.urdf
+urdf_root: robot_description/x3
+base_height: 0.89
+scale: 1.0
+t_pose: [0, 0, 0.89, 0, 0, 0, 1, 0, 0, -0.2, 0.4, -0.2, 0, 0, -0.2, 0.4, -0.2,
+         0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,]
+joint_pairs:
+  waist_yaw_joint: waist_yaw_joint
+  waist_roll_joint: waist_roll_joint
+  left_hip_yaw_joint: left_hip_yaw_joint
+  left_hip_roll_joint: left_hip_roll_joint
+  left_hip_pitch_joint: left_hip_pitch_joint
+  left_knee_joint: left_knee_joint
+  left_ankle_pitch_joint: left_ankle_pitch_joint
+  left_ankle_roll_joint: left_ankle_roll_joint
+  left_shoulder_pitch_joint: left_shoulder_pitch_joint
+  left_shoulder_roll_joint: left_shoulder_roll_joint
+  left_shoulder_yaw_joint: left_shoulder_yaw_joint
+  left_elbow_joint: left_elbow_joint
+  left_wrist_roll_joint: left_wrist_roll_joint
+  right_hip_yaw_joint: right_hip_yaw_joint
+  right_hip_roll_joint: right_hip_roll_joint
+  right_hip_pitch_joint: right_hip_pitch_joint
+  right_knee_joint: right_knee_joint
+  right_ankle_pitch_joint: right_ankle_pitch_joint
+  right_ankle_roll_joint: right_ankle_roll_joint
+  right_shoulder_pitch_joint: right_shoulder_pitch_joint
+  right_shoulder_roll_joint: right_shoulder_roll_joint
+  right_shoulder_yaw_joint: right_shoulder_yaw_joint
+  right_elbow_joint: right_elbow_joint
+  right_wrist_roll_joint: right_wrist_roll_joint
+

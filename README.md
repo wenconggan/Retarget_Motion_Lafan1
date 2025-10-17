@@ -40,7 +40,12 @@ python retarget_motion.py \
     /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject2.csv
 
 python retarget_motion.py     --config robot_configs/x2.yaml  --target-urdf robot_description/x2/x2.urdf     --output-dir retargeted_motions/x2     /home/wenconggan/Retarget_Motion_Lafan1/g1/dance1_subject1.csv
+```
 
+
+convert all lafan motion 
+```
+python retarget_motion.py   --config robot_configs/x2.yaml  --target-urdf robot_description/x2/x2.urdf     --output-dir retargeted_motions/x2     /home/xxx/g1/*.csv
 ```
 
 3. Visualizing retargeted motion files.
