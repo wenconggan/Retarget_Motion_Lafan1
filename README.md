@@ -1,6 +1,17 @@
 #  Retarget_Motion_Lafan1
 ### Usage
 
+
+Env Install:
+
+```bash
+conda create -n retarget_lafan_env python=3.9
+pip install -r requirements.txt
+pip install pyyaml
+conda install -c conda-forge pinocchio
+```
+
+
 1. Extracting joint names from URDF files
 ```bash
 # Default behavior with built-in URDFs
@@ -8,12 +19,8 @@ python extract_joint_names.py
 ```
 ```bash
 # Custom URDF with verbose output
-python extract_joint_names.py -u /home/wenconggan/motion_retarget/robot_description/stompypro/robot_test.urdf -v
+python extract_joint_names.py -u /path/xxx/xxx.urdf -v
 python extract_joint_names.py -u /home/wenconggan/motion_retarget/robot_description/g1/g1_29dof_rev_1_0.urdf -v
-
-python extract_joint_names.py -u /home/wenconggan/桌面/LAFAN1_Visualize/motion_retarget/robot_description/x2/x2.urdf -v
-
-python extract_joint_names.py -u /home/wenconggan/桌面/Retarget_Motion_Lafan1/robot_description/x3/x3.urdf -v
 
 ```
 ```bas
@@ -32,12 +39,14 @@ python retarget_motion.py \
     --output-dir retargeted_motions/x2 \
     /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject2.csv
 
-python retarget_motion.py     --config robot_configs/x3.yaml  --target-urdf robot_description/x3/x3.urdf     --output-dir retargeted_motions/x3     /home/wenconggan/桌面/Retarget_Motion_Lafan1/retargeted_motions/g1/dance1_subject3.csv
-
+python retarget_motion.py     --config robot_configs/x2.yaml  --target-urdf robot_description/x2/x2.urdf     --output-dir retargeted_motions/x2     /home/wenconggan/Retarget_Motion_Lafan1/g1/dance1_subject1.csv
 
 ```
 
 3. Visualizing retargeted motion files.
+
+rerun:
+
 ```bash
 # Basic usage
 python rerun_visualize.py -m motions/dance1.csv -r g1
@@ -55,4 +64,8 @@ python rerun_visualize.py \
     --window-title "X2 Dance" \
     --coordinate-frame LEFT_HAND_Z_UP
 ```
- 
+Mujoco:
+
+```bash
+python mujoco_vis.py 
+ ```

@@ -1,10 +1,10 @@
-<mujoco model="x2 scene">
+<mujoco model="X2C scene">
   <include file="x2.xml"/>
 
   <statistic center="1.0 0.7 1.0" extent="0.8"/>
 
   <visual>
-    <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0.9 0.9 0.9"/>
+    <headlight diffuse="0.2 0.2 0.2" ambient="0.2 0.2 0.2" specular="0.6 0.6 0.6"/>
     <rgba haze="0.15 0.25 0.35 1"/>
     <global azimuth="-140" elevation="-20"/>
   </visual>
